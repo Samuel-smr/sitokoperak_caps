@@ -2,254 +2,154 @@
 @section('title', 'Index')
 @section('content')
 
-    <!-- ***** Main Banner Area Start ***** -->
-    <div class="main-banner" id="top">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="left-content">
-                        <div class="thumb">
-                            <div class="inner-content" >
-                                <h4>Jogja Istimewah</h4>
-                                <span>Temukan produk-produk istimewah kami!</span>
-                                <div class="main-border-button">
-                                    <a href="#">Beli Sekarang!</a>
-                                </div>
-                            </div>
-                            <img src="assets/images/malioboro2.jpg" alt="Keraton Yogyakarta" width="790" height="688">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="right-content">
+<div class="main-banner" id="top">
+    <!-- Background dengan gambar asli Anda -->
+    <div class="banner-background">
+        <img src="{{ asset('assets/images/malioboro2.jpg') }}" alt="Keraton Yogyakarta"
+             style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: -1;">
+    </div>
+
+    <!-- Banner Content di sebelah kanan -->
+    <div class="banner-content">
+        <h1>Perak Asli Kotagede – Warisan Seni dari Jogja</h1>
+        <p>
+            Karya seni perak dari Kotagede, Yogyakarta yang menggabungkan tradisi, ketelitian, dan keanggunan. Setiap detail menyimpan cerita, setiap ukiran merekam sejarah. Dibuat oleh tangan pengrajin lokal dengan teknik turun-temurun, menghadirkan keindahan otentik dengan kualitas terbaik.
+        </p>
+        <a href="#" class="btn btn-danger btn-lg mt-3">Beli Sekarang</a>
+    </div>
+</div>
+
+<!-- Kategori Produk Section -->
+<section class="categories">
+    <div class="container">
+        <div class="section-heading">
+            <h2>Kategori Produk</h2>
+            <p class="text-muted">Temukan berbagai koleksi produk perak terbaik kami</p>
+        </div>
+
+        <div id="categoryCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                @php
+                    // Bagi array kategori menjadi grup-grup 3
+                    $chunks = array_chunk($kategoris->toArray(), 3);
+                @endphp
+
+                @foreach ($chunks as $key => $chunk)
+                    <div class="carousel-item @if($key == 0) active @endif">
                         <div class="row">
-                            @foreach ($randomKategoris as $kategori)
-                                <div class="col-lg-6">
-                                    <div class="right-first-image">
-                                        <div class="thumb">
-                                            <div class="inner-content">
-                                                <h4>{{ $kategori->nama_kategori_produk }}</h4>
-                                                <span>Produk Bagus untuk {{ $kategori->nama_kategori_produk }}</span>
+                            @foreach ($chunk as $kategori)
+                                <div class="col-lg-4 col-md-6 mb-4">
+                                    <a href="{{ route('guest-productsByCategory', $kategori['slug']) }}">
+                                        <div class="card category-card h-100">
+                                            <img src="{{ asset('assets/images/' . $kategori['slug'] . '.jpg') }}"
+                                                 alt="{{ $kategori['nama_kategori_produk'] }}"
+                                                 class="card-img-top category-img"
+                                                 onerror="this.onerror=null;this.src='{{ asset('assets/images/kategori-default.jpg') }}';">
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{ $kategori['nama_kategori_produk'] }}</h5>
+                                                <p class="text-muted subtitle">Pesona Perak</p>
+                                                <a href="{{ route('guest-productsByCategory', $kategori['slug']) }}" class="btn btn-outline-dark btn-sm">Lihat Produk</a>
                                             </div>
-                                            <div class="hover-content">
-                                                <div class="inner">
-                                                    <h4>{{ $kategori->nama_kategori_produk }}</h4>
-                                                    <!-- Ini bisa juga diganti kalau mau lebih dinamis -->
-                                                    <p>Temukan keindahan alami dalam setiap
-                                                        {{ strtolower($kategori->nama_kategori_produk) }}!</p>
-                                                    <div class="main-border-button">
-                                                        <a href="{{ route('guest-productsByCategory', $kategori->slug) }}">Cari
-                                                            Disini</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <img src="{{ asset('assets/images/' . $kategori->slug . '.jpg') }}"
-                                                alt="{{ $kategori->nama_kategori_produk }}" class="fixed-width-img"
-                                                onerror="this.onerror=null;this.src='{{ asset('assets/images/kategori-default.jpg') }}';"
-                                                width="385" height="330">
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
                             @endforeach
                         </div>
                     </div>
-                </div>
+                @endforeach
             </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#categoryCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#categoryCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden"></span>
+            </button>
         </div>
     </div>
+</section>
     <!-- ***** Main Banner Area End ***** -->
 
     <!-- ***** Produk Area Starts ***** -->
-    <section class="section" id="men">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="section-heading">
-                        <h2>Produk Terbaru Kami!</h2>
-                        <span>Temukan Produk Terfavoritmu!</span>
+<section class="products">
+    <div class="container">
+        <div class="section-heading">
+            <h2>Produk Terbaru Kami!</h2>
+            <span>Temukan Produk Terfavoritmu!</span>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            @foreach ($produks as $produk)
+                {{-- Menggunakan col-lg-3 untuk 4 item per baris --}}
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="product-item">
+                        <a href="{{ route('guest-singleProduct', $produk->slug) }}">
+                            <div class="thumb">
+                                <img src="{{ asset('storage/' . optional($produk->fotoProduk->first())->file_foto_produk) }}"
+                                    alt="{{ $produk->nama_produk }}"
+                                    onerror="this.onerror=null;this.src='{{ asset('images/produk-default.jpg') }}';">
+                            </div>
+                            <div class="down-content">
+                                <h4>{{ $produk->nama_produk }}</h4>
+                                <span class="product-price">Rp {{ number_format($produk->harga, 0, ',', '.') }}</span>
+                                <ul class="stars">
+                                    @for ($i = 0; $i < 5; $i++)
+                                        <li><i class="fa fa-star"></i></li>
+                                    @endfor
+                                </ul>
+                                <p class="product-reviews">20 Reviews</p>
+                            </div>
+                        </a>
                     </div>
                 </div>
+            @endforeach
+        </div>
+
+        <div class="col-lg-12">
+            <div class="text-center mt-5">
+                <a href="#" class="see-all-button btn">Lihat Semua</a>
             </div>
         </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="men-item-carousel">
-                        <div class="owl-men-item owl-carousel">
-                            @foreach ($randomProduks as $produk)
-                                <div class="item">
-                                    <div class="thumb">
-                                        <div class="hover-content">
-                                            <ul>
-                                                <li><a href="{{ route('guest-singleProduct', $produk->slug) }}"><i
-                                                            class="fa fa-eye"></i></a></li>
-                                                <li><a href=""><i class="fa fa-star"></i></a></li>
-                                                <li><a href=""><i class="fa fa-shopping-cart"></i></a></li>
-                                            </ul>
-                                        </div>
-                                        <img src="{{ asset('storage/' . optional($produk->fotoProduk->first())->file_foto_produk) }}"
-                                            alt="{{ $produk->nama_produk }}"
-                                            onerror="this.onerror=null;this.src='{{ asset('images/produk-default.jpg') }}';">
-                                    </div>
-                                    <div class="down-content">
-                                        <h4>{{ $produk->nama_produk }}</h4>
-                                        <span>Rp {{ number_format($produk->harga, 0, ',', '.') }}</span>
-                                        <ul class="stars">
-                                            @for ($i = 0; $i < 5; $i++)
-                                                <li><i class="fa fa-star"></i></li>
-                                            @endfor
-                                        </ul>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-            </div>
-    </section>
+    </div>
+</section>
     <!-- ***** Produk Area Ends ***** -->
 
-    {{-- <!-- ***** Social Area Starts ***** -->
-    <section class="section" id="social">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="section-heading">
-                        <h2>Social Media</h2>
-                        <span>Details to details is what makes Hexashop different from the other themes.</span>
-                    </div>
-                </div>
-            </div>
+<section class="pengrajins">
+    <div class="container">
+        <div class="section-heading">
+            <h2>Pengrajin Kami!</h2>
+            <span>Temukan Pengrajin favoritmu!</span>
         </div>
-        <div class="container">
-            <div class="row images">
-                <div class="col-2">
-                    <div class="thumb">
-                        <div class="icon">
-                            <a href="http://instagram.com">
-                                <h6>Fashion</h6>
-                                <i class="fa fa-instagram"></i>
-                            </a>
-                        </div>
-                        <img src="assets/images/instagram-01.jpg" alt="">
-                    </div>
-                </div>
-                <div class="col-2">
-                    <div class="thumb">
-                        <div class="icon">
-                            <a href="http://instagram.com">
-                                <h6>New</h6>
-                                <i class="fa fa-instagram"></i>
-                            </a>
-                        </div>
-                        <img src="assets/images/instagram-02.jpg" alt="">
-                    </div>
-                </div>
-                <div class="col-2">
-                    <div class="thumb">
-                        <div class="icon">
-                            <a href="http://instagram.com">
-                                <h6>Brand</h6>
-                                <i class="fa fa-instagram"></i>
-                            </a>
-                        </div>
-                        <img src="assets/images/instagram-03.jpg" alt="">
-                    </div>
-                </div>
-                <div class="col-2">
-                    <div class="thumb">
-                        <div class="icon">
-                            <a href="http://instagram.com">
-                                <h6>Makeup</h6>
-                                <i class="fa fa-instagram"></i>
-                            </a>
-                        </div>
-                        <img src="assets/images/instagram-04.jpg" alt="">
-                    </div>
-                </div>
-                <div class="col-2">
-                    <div class="thumb">
-                        <div class="icon">
-                            <a href="http://instagram.com">
-                                <h6>Leather</h6>
-                                <i class="fa fa-instagram"></i>
-                            </a>
-                        </div>
-                        <img src="assets/images/instagram-05.jpg" alt="">
-                    </div>
-                </div>
-                <div class="col-2">
-                    <div class="thumb">
-                        <div class="icon">
-                            <a href="http://instagram.com">
-                                <h6>Bag</h6>
-                                <i class="fa fa-instagram"></i>
-                            </a>
-                        </div>
-                        <img src="assets/images/instagram-06.jpg" alt="">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- ***** Social Area Ends ***** -->
 
-    <!-- ***** Subscribe Area Starts ***** -->
-    <div class="subscribe">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8">
-                    <div class="section-heading">
-                        <h2>By Subscribing To Our Newsletter You Can Get 30% Off</h2>
-                        <span>Details to details is what makes Hexashop different from the other themes.</span>
-                    </div>
-                    <form id="subscribe" action="" method="get">
-                        <div class="row">
-                            <div class="col-lg-5">
-                                <fieldset>
-                                    <input name="name" type="text" id="name" placeholder="Your Name"
-                                        required="">
-                                </fieldset>
-                            </div>
-                            <div class="col-lg-5">
-                                <fieldset>
-                                    <input name="email" type="text" id="email" pattern="[^ @]*@[^ @]*"
-                                        placeholder="Your Email Address" required="">
-                                </fieldset>
-                            </div>
-                            <div class="col-lg-2">
-                                <fieldset>
-                                    <button type="submit" id="form-submit" class="main-dark-button"><i
-                                            class="fa fa-paper-plane"></i></button>
-                                </fieldset>
-                            </div>
-                        </div>
-                    </form>
+        <div class="col-lg-12">
+            <div class="text-center mt-5">
+                <a href="#" class="see-all-button btn">Lihat Semua</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="about-us">
+    <div class="container">
+        <div class="row align-items-center">
+            {{-- Gambar akan mengambil 7 kolom di layar besar (lebih besar) --}}
+            <div class="col-lg-7 col-md-12">
+                <div class="about-image">
+                    <img src="{{ asset('assets/images/kerajinan-perak-kota-ged.png') }}" alt="Sentra Kerajinan Perak Kotagede" class="img-fluid">
                 </div>
-                <div class="col-lg-4">
-                    <div class="row">
-                        <div class="col-6">
-                            <ul>
-                                <li>Store Location:<br><span>Sunny Isles Beach, FL 33160, United States</span></li>
-                                <li>Phone:<br><span>010-020-0340</span></li>
-                                <li>Office Location:<br><span>North Miami Beach</span></li>
-                            </ul>
-                        </div>
-                        <div class="col-6">
-                            <ul>
-                                <li>Work Hours:<br><span>07:30 AM - 9:30 PM Daily</span></li>
-                                <li>Email:<br><span>info@company.com</span></li>
-                                <li>Social Media:<br><span><a href="#">Facebook</a>, <a
-                                            href="#">Instagram</a>, <a href="#">Behance</a>, <a
-                                            href="#">Linkedin</a></span></li>
-                            </ul>
-                        </div>
-                    </div>
+            </div>
+            {{-- Kotak teks akan mengambil 5 kolom di layar besar (lebih kecil) --}}
+            <div class="col-lg-5 col-md-12">
+                <div class="about-content">
+                    <h3>TekoPerakku</h3>
+                    <p>TekoPerakku menghadirkan kerajinan perak asli Kotagede dengan kualitas terbaik. Setiap karya diproses secara teliti oleh pengrajin berpengalaman untuk menjaga keaslian dan keindahan tradisi. Kami berkomitmen memberikan produk yang elegan, otentik, dan bernilai seni tinggi bagi setiap pelanggan.</p>
+                    <a href="#" class="btn btn-primary about-btn">Pelajari Lebih Lanjut</a>
                 </div>
             </div>
         </div>
     </div>
-    <!-- ***** Subscribe Area Ends ***** --> --}}
-
-
+</section>
 @endsection

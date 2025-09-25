@@ -20,10 +20,9 @@
     <link rel="stylesheet" href="{{ asset('assets/css/owl-carousel.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/lightbox.css') }}">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="{{ asset('assets/css/index-css.css') }}">
 
 </head>
 
@@ -39,41 +38,60 @@
     <!-- ***** Preloader End ***** -->
 
     <!-- ***** Header Area Start ***** -->
-    <header class="header-area header-sticky">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <nav class="main-nav">
-                        <!-- ***** Logo Start ***** -->
-                        <a href="{{ route('guest-index') }}" class="logo">
-                            <p style="color: black; font-size: 24px; font-weight: normal; text-transform: none; margin-top: 35px;">TekoPerakku</p>
-                        </a>
+    <header class="shadow-sm fixed-top">
+        <nav class="navbar navbar-expand-lg bg-white ">
+            <div class="container">
+            <!-- Logo -->
+                <a class="navbar-brand fw-bold fs-4" href="{{ route('guest-index') }}">
+                    TekoPerakku
+                </a>
 
-                        <!-- ***** Menu Start ***** -->
-                        <ul class="nav">
-                            <li class="scroll-to-section"><a href="{{ route('guest-index') }}">Beranda</a></li>
-                            <li class="submenu">
-                                <a href="javascript:;">Kategori</a>
-                                <ul>
-                                    @foreach ($kategoris as $kategori)
-                                        <li>
-                                            <a href="{{ route('guest-productsByCategory', $kategori->slug) }}">
-                                                {{ $kategori->nama_kategori_produk }}
-                                            </a>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </li>
-                            <li class="scroll-to-section"><a href="{{ route('guest-about') }}">Tentang Kami</a></li>
-                            <li class="scroll-to-section"><a href="{{ route('guest-contact') }}">Kontak</a></li>
-                            <li class="scroll-to-section"><a href="{{ route('loginForm') }}">Login</a></li>
-                        </ul>
-                        <a class='menu-trigger'>
-                            <span>Menu</span>
-                        </a>
-                        <!-- ***** Menu End ***** -->
-                    </nav>
+                <!-- Search -->
+                <form class="d-flex w-75">
+                    <input class="form-control" type="search" placeholder="Cari Produk">
+                </form>
+
+                <!-- Icons -->
+                <div class="d-flex align-items-center">
+                    <a href="{{ route('loginForm') }}" class="me-3 text-dark d-flex align-items-center">
+                        <i class="fa fa-user me-2"></i>
+                        Login
+                    </a>
                 </div>
+            </div>
+        </nav>
+
+        <div class="bg-white">
+            <div class="container">
+                <ul class="nav justify-content-center py-2">
+                    <li class="nav-item">
+                        <a class="nav-link {{ Route::is('guest-index') ? 'active' : '' }}" href="{{ route('guest-index') }}">BERANDA</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Route::is('guest-katalog') ? 'active' : '' }}" href="#">KATALOG</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {{ Route::is('guest-productsByCategory*') ? 'active' : '' }}" href="#" id="kategoriDropdown" role="button">
+                            KATEGORI
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="kategoriDropdown">
+                            @foreach ($kategoris as $kategori)
+                            <li>
+                                <a class="dropdown-item {{ request()->is('products/'.$kategori->slug) ? 'active' : '' }}"
+                                href="{{ route('guest-productsByCategory', $kategori->slug) }}">
+                                {{ $kategori->nama_kategori_produk }}
+                                </a>
+                            </li>
+                            @endforeach
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Route::is('guest-about') ? 'active' : '' }}" href="{{ route('guest-about') }}">TENTANG KAMI</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Route::is('guest-contact') ? 'active' : '' }}" href="{{ route('guest-contact') }}">KONTAK</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </header>
@@ -85,27 +103,24 @@
     </div>
     <!-- ***** Content End ***** -->
 
-    <!-- ***** Footer Start ***** -->
-    <footer>
+   <!-- ***** Footer Start ***** -->
+    <footer class="footer">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="first-item">
-                        <div class="logo">
-                            <p style="color: black; font-size: 24px; font-weight: normal; text-transform: none; background-color: white; padding: 4px 8px;">TekoPerakku</p>
-                        </div>
-                        <ul>
-                            <li><a href="#">59GX+957, JL. Watu Gateng, Prenggan, Kec. Kotagede, Kota Yogyakarta,
-                                    Daerah Istimewa Yogyakarta 55172</a>
-                            </li>
-                            <li><a href="#">kotagedhe@gmail.com</a></li>
-                            <li><a href="#">088-098-202</a></li>
-                        </ul>
-                    </div>
+            <div class="row footer-flex">
+                <!-- Logo & Alamat -->
+                <div class="mb-4">
+                    <h3 class="footer-logo">TekoPerakku</h3>
+                    <ul class="footer-list">
+                        <li>59GX+957, JL. Watu Gateng,<br>Prenggan, Kec. Kotagede, Kota Yogyakarta</li>
+                        <li>kotagedhe@gmail.com</li>
+                        <li>088-098-202</li>
+                    </ul>
                 </div>
-                <div class="col-lg-3">
-                    <h4>Belanja &amp; Kategori</h4>
-                    <ul>
+
+                <!-- Kategori -->
+                <div class="mb-4">
+                    <h5 class="footer-title">Kategori</h5>
+                    <ul class="footer-list">
                         @foreach ($randomKategoris as $kategori)
                             <li>
                                 <a href="{{ route('guest-productsByCategory', $kategori->slug) }}">
@@ -115,32 +130,32 @@
                         @endforeach
                     </ul>
                 </div>
-                <div class="col-lg-3">
-                    <h4>Informasi Kami</h4>
-                    <ul>
+
+                <!-- Informasi Kami -->
+                <div class="mb-4">
+                    <h5 class="footer-title">Informasi Kami</h5>
+                    <ul class="footer-list">
                         <li><a href="{{ route('guest-index') }}">Beranda</a></li>
                         <li><a href="{{ route('guest-about') }}">Tentang Kami</a></li>
                         <li><a href="{{ route('guest-contact') }}">Kontak Kami</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-3">
-                    <h4>Bantuan &amp; Pertanyaan</h4>
-                    <ul>
-                        <li><a href="#">Bantuan</a></li>
-                        <li><a href="#">Pertanyaan</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-12">
-                    <div class="under-footer">
-                        <p>Copyright © 2025 Toko Perak Kotagedhe. All rights reserved.</p>
-                        </p>
-                        <ul>
-                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                            <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-                        </ul>
+
+                <!-- Sosial Media -->
+                <div class="mb-4">
+                    <h5 class="footer-title">Sosial Media</h5>
+                    <div class="footer-social">
+                        <a href="#"><i class="fa fa-facebook"></i></a>
+                        <a href="#"><i class="fa fa-twitter"></i></a>
+                        <a href="#"><i class="fa fa-instagram"></i></a>
                     </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="row mt-4">
+                <div class="col-12 text-center">
+                    <p class="footer-copy">Copyright © 2025 | All Rights Reserved.</p>
                 </div>
             </div>
         </div>
