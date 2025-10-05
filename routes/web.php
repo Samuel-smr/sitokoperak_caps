@@ -27,6 +27,7 @@ Route::get('about', [PageController::class, 'about'])->name('guest-about');
 Route::get('contact', [PageController::class, 'contact'])->name('guest-contact');
 Route::get('products', [PageController::class, 'products'])->name('guest-products');
 Route::get('single-product', [PageController::class, 'singleProduct'])->name('guest-single-product');
+Route::get('katalog', [PageController::class, 'katalog'])->name('guest-katalog');
 Route::get('produk/kategori/{slug}', [PageController::class, 'productsByCategory'])->name('guest-productsByCategory');
 Route::get('produk/{slug}', [PageController::class, 'singleProduct'])->name('guest-singleProduct');
 

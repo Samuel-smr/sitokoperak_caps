@@ -15,7 +15,7 @@
         <p>
             Karya seni perak dari Kotagede, Yogyakarta yang menggabungkan tradisi, ketelitian, dan keanggunan. Setiap detail menyimpan cerita, setiap ukiran merekam sejarah. Dibuat oleh tangan pengrajin lokal dengan teknik turun-temurun, menghadirkan keindahan otentik dengan kualitas terbaik.
         </p>
-        <a href="#" class="btn btn-danger btn-lg mt-3">Beli Sekarang</a>
+        <a href="javascript:void(0);" class="btn btn-danger btn-lg mt-3 scroll-to-produk">Beli Sekarang</a>
     </div>
 </div>
 
@@ -39,7 +39,7 @@
                         <div class="row">
                             @foreach ($chunk as $kategori)
                                 <div class="col-lg-4 col-md-6 mb-4">
-                                    <a href="{{ route('guest-productsByCategory', $kategori['slug']) }}">
+                                    <a href="{{ route('guest-katalog', array_merge(request()->except('page'), ['kategori' => $kategori['slug']])) }}">
                                         <div class="card category-card h-100">
                                             <img src="{{ asset('assets/images/' . $kategori['slug'] . '.jpg') }}"
                                                  alt="{{ $kategori['nama_kategori_produk'] }}"
@@ -48,7 +48,7 @@
                                             <div class="card-body">
                                                 <h5 class="card-title">{{ $kategori['nama_kategori_produk'] }}</h5>
                                                 <p class="text-muted subtitle">Pesona Perak</p>
-                                                <a href="{{ route('guest-productsByCategory', $kategori['slug']) }}" class="btn btn-outline-dark btn-sm">Lihat Produk</a>
+                                                <a href="{{ route('guest-katalog', array_merge(request()->except('page'), ['kategori' => $kategori['slug']])) }}" class="btn btn-outline-dark btn-sm">Lihat Produk</a>
                                             </div>
                                         </div>
                                     </a>
@@ -110,22 +110,42 @@
 
         <div class="col-lg-12">
             <div class="text-center mt-5">
-                <a href="#" class="see-all-button btn">Lihat Semua</a>
+                <a href="{{ route('guest-katalog') }}" class="see-all-button btn">Lihat Semua</a>
             </div>
         </div>
     </div>
 </section>
     <!-- ***** Produk Area Ends ***** -->
 
-<section class="pengrajins">
+<section class="pengrajins-section">
     <div class="container">
-        <div class="section-heading">
-            <h2>Pengrajin Kami!</h2>
-            <span>Temukan Pengrajin favoritmu!</span>
+        <div class="row mt-2">
+            <div class="col-lg-12">
+                <div class="section-heading">
+                    <h2>Temukan Pengrajin Kesukaanmu!</h2>
+                    <span>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text.</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            @for ($i = 0; $i < 8; $i++)
+            <div class="col-lg-3 col-sm-6 mb-4">
+                <div class="pengrajin-card">
+                    <div class="pengrajin-thumb">
+                        <img src="{{ asset('assets/images/kategori-default.jpg') }}" alt="Foto Pengrajin">
+                    </div>
+                    <div class="pengrajin-info">
+                        <h5 class="pengrajin-name">Nama Pengrajin {{ $i + 1 }}</h5>
+                        <p class="pengrajin-spesialisasi">Spesialisasi Kerajinan</p>
+                    </div>
+                </div>
+            </div>
+            @endfor
         </div>
 
         <div class="col-lg-12">
-            <div class="text-center mt-5">
+            <div class="text-center mt-2">
                 <a href="#" class="see-all-button btn">Lihat Semua</a>
             </div>
         </div>
@@ -146,10 +166,22 @@
                 <div class="about-content">
                     <h3>TekoPerakku</h3>
                     <p>TekoPerakku menghadirkan kerajinan perak asli Kotagede dengan kualitas terbaik. Setiap karya diproses secara teliti oleh pengrajin berpengalaman untuk menjaga keaslian dan keindahan tradisi. Kami berkomitmen memberikan produk yang elegan, otentik, dan bernilai seni tinggi bagi setiap pelanggan.</p>
-                    <a href="#" class="btn btn-primary about-btn">Pelajari Lebih Lanjut</a>
+                    <a href="{{ route('guest-about') }}" class="btn btn-primary about-btn">Pelajari Lebih Lanjut</a>
                 </div>
             </div>
         </div>
     </div>
 </section>
 @endsection
+
+@push('scripts')
+<script>
+    document.querySelector('.scroll-to-produk').addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector('.products').scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+</script>
+@endpush
+

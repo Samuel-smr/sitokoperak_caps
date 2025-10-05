@@ -23,6 +23,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <link rel="stylesheet" href="{{ asset('assets/css/index-css.css') }}">
+    @stack('styles')
 
 </head>
 
@@ -39,28 +40,29 @@
 
     <!-- ***** Header Area Start ***** -->
     <header class="shadow-sm fixed-top">
-        <nav class="navbar navbar-expand-lg bg-white ">
-            <div class="container">
-            <!-- Logo -->
-                <a class="navbar-brand fw-bold fs-4" href="{{ route('guest-index') }}">
+        <nav class="navbar navbar-expand-lg bg-white">
+            <div class="container d-flex align-items-center">
+                
+                <!-- Logo -->
+                <a class="navbar-brand fw-bold fs-4 me-3" href="{{ route('guest-index') }}">
                     TekoPerakku
                 </a>
 
                 <!-- Search -->
-                <form class="d-flex w-75">
+                <form class="d-flex flex-grow-1 mx-3">
                     <input class="form-control" type="search" placeholder="Cari Produk">
                 </form>
 
-                <!-- Icons -->
-                <div class="d-flex align-items-center">
-                    <a href="{{ route('loginForm') }}" class="me-3 text-dark d-flex align-items-center">
-                        <i class="fa fa-user me-2"></i>
-                        Login
+                <!-- Login -->
+                <div>
+                    <a href="{{ route('loginForm') }}" class="text-dark d-flex align-items-center">
+                        <i class="fa fa-user me-2"></i> Login
                     </a>
                 </div>
             </div>
         </nav>
 
+        <!-- Navbar Menu -->
         <div class="bg-white">
             <div class="container">
                 <ul class="nav justify-content-center py-2">
@@ -68,18 +70,22 @@
                         <a class="nav-link {{ Route::is('guest-index') ? 'active' : '' }}" href="{{ route('guest-index') }}">BERANDA</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ Route::is('guest-katalog') ? 'active' : '' }}" href="#">KATALOG</a>
+                        <a class="nav-link {{ Route::is('guest-katalog') ? 'active' : '' }}" href="{{ route('guest-katalog') }}">KATALOG</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">PENGRAJIN</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle {{ Route::is('guest-productsByCategory*') ? 'active' : '' }}" href="#" id="kategoriDropdown" role="button">
+                        <a class="nav-link dropdown-toggle" href="#" id="kategoriDropdown" role="button" data-bs-toggle="dropdown">
                             KATEGORI
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="kategoriDropdown">
                             @foreach ($kategoris as $kategori)
                             <li>
-                                <a class="dropdown-item {{ request()->is('products/'.$kategori->slug) ? 'active' : '' }}"
-                                href="{{ route('guest-productsByCategory', $kategori->slug) }}">
-                                {{ $kategori->nama_kategori_produk }}
+                                {{-- 1. Link diubah ke route 'guest-katalog' dengan parameter query --}}
+                                <a class="dropdown-item {{ request('kategori') == $kategori->slug ? 'active' : '' }}"
+                                href="{{ route('guest-katalog', ['kategori' => $kategori->slug]) }}">
+                                    {{ $kategori->nama_kategori_produk }}
                                 </a>
                             </li>
                             @endforeach
@@ -95,6 +101,7 @@
             </div>
         </div>
     </header>
+
     <!-- ***** Header Area End ***** -->
 
     <!-- ***** Content Start ***** -->
@@ -166,7 +173,7 @@
     <script src="{{ asset('assets/js/jquery-2.1.0.min.js') }}"></script>
 
     <!-- Bootstrap -->
-    <script src="{{ asset('assets/js/popper.js') }}"></script>
+    @stack('scripts') <script src="{{ asset('assets/js/popper.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
 
     <!-- Plugins -->

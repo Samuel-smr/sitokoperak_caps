@@ -29,6 +29,44 @@ class PageController extends Controller
         ]);
     }
 
+    public function katalog(Request $request)
+{
+    $query = Produk::with('kategoriProduk', 'fotoProduk');
+
+    if ($request->filled('kategori')) {
+        $query->whereHas('kategoriProduk', function ($q) use ($request) {
+            $q->where('slug', $request->kategori);
+        });
+    }
+
+    if ($request->filled('min_harga')) {
+        $query->where('harga', '>=', $request->min_harga);
+    }
+    if ($request->filled('max_harga')) {
+        $query->where('harga', '<=', $request->max_harga);
+    }
+
+    if ($request->filled('urutkan')) {
+        if ($request->urutkan == 'terlaris') {
+            $query->orderBy('jumlah_terjual', 'desc');
+        }
+        else {
+            $query->latest(); 
+        }
+    } else {
+        $query->latest();
+    }
+
+    $produks = $query->paginate(12)->appends($request->query());
+
+    $kategoris = KategoriProduk::all();
+
+    return view('guest.pages.katalog', [
+        'produks' => $produks,
+        'kategoris' => $kategoris,
+    ]);
+}
+
     public function singleProduct($slug)
     {
         $produk = Produk::where('slug', $slug)->firstOrFail();

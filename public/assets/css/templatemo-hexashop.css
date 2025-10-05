@@ -210,25 +210,12 @@ header
 .background-header {
   border-bottom: none !important;
   background-color: #fff;
-  height: 80px!important;
+  /* height: 80px!important; */
   position: fixed!important;
   top: 0px;
   left: 0px;
   right: 0px;
   box-shadow: 0px 0px 10px rgba(0,0,0,0.15)!important;
-}
-
-.background-header .logo,
-.background-header .main-nav .nav li a {
-  color: #1e1e1e!important;
-}
-
-.background-header .main-nav .nav li:hover a {
-  color: #2a2a2a!important;
-}
-
-.background-header .nav li a.active {
-  color: #2a2a2a!important;
 }
 
 .header-area {
@@ -270,9 +257,9 @@ header
   line-height: 75px;
 }
 
-.background-header .nav {
+/* .background-header .nav {
   margin-top: 20px !important;
-}
+} */
 
 .header-area .main-nav .nav {
   float: right;
@@ -643,7 +630,6 @@ header
   }
 }
 
-
 /* 
 ---------------------------------------------
 banner
@@ -651,7 +637,6 @@ banner
 */
 
 .main-banner {
-  border-bottom: 3px dotted #eee;
   padding-top: 160px;
   padding-bottom: 30px;
 }
@@ -1499,7 +1484,7 @@ footer
 --------------------------------------------- 
 */
 
-footer {
+/* footer {
   margin-top: 60px;
   padding: 60px 0px 30px 0px;
   background-color: #2a2a2a;
@@ -1564,7 +1549,7 @@ footer .under-footer a {
 
 footer .under-footer a:hover {
   color: #c66;
-}
+} */
 
 
 /* 
@@ -1574,7 +1559,6 @@ Products Page
 */
 
 .page-heading {
-  margin-top: 160px;
   margin-bottom: 30px;
   background-image: url(../images/products-page-heading.jpg);
   background-position: center center;
