@@ -898,15 +898,14 @@ div > .dropdown-menu {
     border: none;
 }
 
-/* Dropdown Menu Custom (sedikit penyesuaian padding jika perlu) */
 .dropdown-menu-custom {
-    min-width: 320px; /* Lebar minimum untuk dropdown */
-    width: auto; /* Biarkan lebar menyesuaikan konten atau min-width */
+    min-width: 320px; 
+    width: auto; 
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Bisa disesuaikan lagi */
     margin-top: 5px;
-    padding: 20px; /* Padding keseluruhan dropdown */
+    padding: 20px; 
 }
 
 /* Container untuk form harga baru */
@@ -981,6 +980,7 @@ div > .dropdown-menu {
     transition: all 0.3s ease;
     cursor: pointer;
     margin-top: 4px;
+    flex: 2
 }
 
 .btn-apply-new:hover {
@@ -1000,16 +1000,11 @@ div > .dropdown-menu {
     margin-top: 4px;
 }
 
-.btn-apply-new {
-    flex: 2; /* Membuat tombol Terapkan lebih lebar dari Reset */
-    /* Style lainnya sudah ada dari sebelumnya */
-}
-
 .btn-reset-new {
     flex: 1; /* Lebar tombol Reset */
     background-color: #FFFFFF;
-    color: #6c757d; /* Warna teks abu-abu */
-    border: 1px solid #dee2e6; /* Border abu-abu terang */
+    color: #6c757d; 
+    border: 1px solid #dee2e6; 
     padding: 6px;
     font-weight: 500;
     font-size: 14px;
@@ -1036,6 +1031,105 @@ div > .dropdown-menu {
     left: 0;
     z-index: 1000;
     width: 100%; /* Atau gunakan min-width di .dropdown-menu-custom */
+}
+
+/* Profil PENGRAJINNYA */
+.detail-pengrajin-section {
+    padding: 60px 0;
+    background-color: #fff;
+    /* Anda bisa menambahkan background pattern di sini jika perlu */
+    /* background-image: url('../images/pattern.png'); */
+}
+
+/* Sidebar Profil (Kolom Kiri) */
+.pengrajin-sidebar {
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 30px;
+    border: 1px solid #f0f0f0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    position: sticky; /* Membuat sidebar tetap terlihat saat scroll */
+    top: 120px; /* Jarak dari atas, sesuaikan dengan tinggi header */
+}
+
+.profil-foto-wrapper {
+    text-align: center;
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.profil-foto {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.profil-info {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 30px;
+}
+
+.nama-pengrajin {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2a2a2a;
+    margin-bottom: 5px;
+}
+
+.spesialisasi, .keahlian {
+    font-size: 15px;
+    color: #888;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+.keahlian {
+    margin-top: 10px;
+}
+
+.kontak-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+}
+
+.kontak-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 15px;
+    color: #555;
+}
+
+.kontak-list li i {
+    width: 30px;
+    text-align: center;
+    color: #C2272D; /* Warna ikon merah */
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+.alamat-info {
+    display: flex;
+    font-size: 15px;
+    color: #555;
+    line-height: 1.7;
+}
+
+.alamat-info i {
+    width: 30px;
+    text-align: center;
+    color: #C2272D; /* Warna ikon merah */
+    margin-right: 10px;
+    margin-top: 5px;
+    font-size: 16px;
 }
 
 /* Class untuk menandai filter yang sedang aktif */
@@ -1123,10 +1217,18 @@ div > .dropdown-menu {
     /* Navbar Search */
     .navbar .form-control {
         width: 90%;
-        margin: 0px;
+        margin: 10px;
         padding: 6px 15px;
+        font-size: 14px;
     }
 
+    .navbar {
+        padding-bottom: 0;
+    }
+
+    .d-flex div a{
+        font-size: 14px;
+    }
     .navbar-brand{
         font-size: 20px;
     }
@@ -1209,19 +1311,45 @@ div > .dropdown-menu {
 /* Mobile (max-width: 768px) */
 @media (max-width: 768px) {
     .content {
-        padding-top: 150px; 
+        padding-top: 0px; 
+    }
+
+    .d-flex a {
+        margin-left: 0px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        text-decoration: none;
+        padding: 8px 8px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .navbar {
+        padding-bottom: 0;
     }
 
     /* Navbar Search */
     .navbar .form-control {
-        width: 90%;
-        margin: 0px;
-        padding: 6px 15px;
+        width: 100%;
+        margin: 0 5px;
+        padding: 6px 10px;
+        font-size: 12px;
     }
 
     .navbar-brand{
-        font-size: 20px;
+        font-size: 14px;
+        margin: 0;
     }
+
+    .d-flex div a{
+        font-size: 12px;
+    }
+
+    .dropdown-item{
+        font-size: 14px;
+    }
+
     /* Banner */
     .main-banner {
         height: auto;
@@ -1265,8 +1393,8 @@ div > .dropdown-menu {
 
      /* Nav Item */
     .nav-item .nav-link {
-        margin: 5px 10px;
-        font-size: 12px;
+        margin: 5px 8px;
+        font-size: 10px;
         text-align: center;
     }
 

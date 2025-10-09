@@ -25,7 +25,7 @@ class ViewServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $view->with([
                 'randomKategoris' => KategoriProduk::inRandomOrder()->take(4)->get(),
-                'randomProduks' => Produk::inRandomOrder()->take(4)->get(),
+                'randomProduks' => Produk::inRandomOrder()->take(8)->get(),
                 'kategoris' => KategoriProduk::all(),
             ]);
         });

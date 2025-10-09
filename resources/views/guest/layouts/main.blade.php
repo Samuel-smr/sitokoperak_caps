@@ -21,7 +21,8 @@
     <link rel="stylesheet" href="{{ asset('assets/css/lightbox.css') }}">
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    
     <link rel="stylesheet" href="{{ asset('assets/css/index-css.css') }}">
     @stack('styles')
 
@@ -49,7 +50,7 @@
                 </a>
 
                 <!-- Search -->
-                <form class="d-flex flex-grow-1 mx-3">
+                <form class="d-flex flex-grow-1">
                     <input class="form-control" type="search" placeholder="Cari Produk">
                 </form>
 
@@ -72,9 +73,9 @@
                     <li class="nav-item">
                         <a class="nav-link {{ Route::is('guest-katalog') ? 'active' : '' }}" href="{{ route('guest-katalog') }}">KATALOG</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link" href="#">PENGRAJIN</a>
-                    </li>
+                    </li> -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="kategoriDropdown" role="button" data-bs-toggle="dropdown">
                             KATEGORI

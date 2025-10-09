@@ -43,4 +43,9 @@ class Produk extends Model
     {
         return $this->hasMany(FotoProduk::class, 'produk_id');
     }
+
+    public function usaha()
+    {
+        return $this->belongsToMany(Usaha::class, 'usaha_produk');
+    }
 }

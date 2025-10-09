@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Guest;
 use App\Http\Controllers\Controller;
 use App\Models\KategoriProduk;
 use App\Models\Produk;
+use App\Models\Usaha;
 use App\Models\FotoProduk;
 use Illuminate\Http\Request;
 
@@ -72,6 +73,22 @@ class PageController extends Controller
         $produk = Produk::where('slug', $slug)->firstOrFail();
         return view('guest.pages.single-product',[
             'produk' => $produk,
+        ]);
+    }
+
+    public function detailUsaha(Request $request, Usaha $usaha)
+    {
+        $usaha->load('pengerajins', 'produks');
+        $previousProduct = null;
+
+        if ($request->has('from_product')) {
+            $previousProduct = Produk::where('slug', $request->from_product)->first();
+        }
+            
+        return view('guest.pages.detail-usaha', [
+            'usaha' => $usaha,
+            'produks' => $usaha->produks,
+            'previousProduct' => $previousProduct, 
         ]);
     }
 

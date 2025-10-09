@@ -82,7 +82,7 @@
     </div>
     <div class="container">
         <div class="row">
-            @foreach ($produks as $produk)
+            @foreach ($randomProduks as $produk)
                 {{-- Menggunakan col-lg-3 untuk 4 item per baris --}}
                 <div class="col-lg-3 col-md-6 mb-4">
                     <div class="product-item">
@@ -117,7 +117,8 @@
 </section>
     <!-- ***** Produk Area Ends ***** -->
 
-<section class="pengrajins-section">
+    <!-- ***** Pengrajin's Area Ends ***** -->
+<!-- <section class="pengrajins-section">
     <div class="container">
         <div class="row mt-2">
             <div class="col-lg-12">
@@ -150,7 +151,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 
 <section class="about-us">
     <div class="container">
