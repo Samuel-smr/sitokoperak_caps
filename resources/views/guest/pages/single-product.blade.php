@@ -30,20 +30,31 @@
                 <div class="col-lg-6">
                     <div class="gallery-wrapper">
                         {{-- Gambar Utama --}}
+                        {{-- Gambar Utama yang Bisa Diklik --}}
                         <div class="main-image-container mb-3">
                             @if($produk->fotoProduk->isNotEmpty())
-                                <img src="{{ asset('storage/' . $produk->fotoProduk->first()->file_foto_produk) }}" alt="{{ $produk->nama_produk }}" id="mainProductImage" class="img-fluid">
+                                {{-- Bungkus <img> dengan <a> --}}
+                                <a href="{{ asset('storage/' . $produk->fotoProduk->first()->file_foto_produk) }}" data-lightbox="product-gallery">
+                                    <img src="{{ asset('storage/' . $produk->fotoProduk->first()->file_foto_produk) }}" alt="{{ $produk->nama_produk }}" id="mainProductImage" class="img-fluid">
+                                </a>
                             @else
-                                <img src="{{ asset('assets/images/produk-default.jpg') }}" alt="Produk Default" id="mainProductImage" class="img-fluid">
+                                <a href="{{ asset('assets/images/produk-default.jpg') }}" data-lightbox="product-gallery">
+                                    <img src="{{ asset('assets/images/produk-default.jpg') }}" alt="Produk Default" id="mainProductImage" class="img-fluid">
+                                </a>
                             @endif
                         </div>
-                        {{-- Thumbnail Gambar --}}
-                        <div class="thumbnail-container">
-                            @foreach ($produk->fotoProduk as $foto)
-                                <div class="thumbnail-item">
-                                    <img src="{{ asset('storage/' . $foto->file_foto_produk) }}" alt="Thumbnail {{ $produk->nama_produk }}" class="img-fluid" onclick="changeMainImage(this)">
-                                </div>
-                            @endforeach
+                        
+                        {{-- Thumbnail Gambar Scroller --}}
+                        <div class="thumbnail-scroller-wrapper">
+                            <button class="thumb-nav-btn prev" id="thumbPrevBtn"><i class="fa fa-chevron-left"></i></button>
+                            <div class="thumbnail-container" id="thumbnailContainer">
+                                @foreach ($produk->fotoProduk as $index => $foto)
+                                    <div class="thumbnail-item {{ $index == 0 ? 'active' : '' }}">
+                                        <img src="{{ asset('storage/' . $foto->file_foto_produk) }}" alt="Thumbnail" class="img-fluid" onclick="changeMainImage(this)">
+                                    </div>
+                                @endforeach
+                            </div>
+                            <button class="thumb-nav-btn next" id="thumbNextBtn"><i class="fa fa-chevron-right"></i></button>
                         </div>
                     </div>
                 </div>
@@ -158,42 +169,82 @@
 
 @push('scripts')
 <script>
-    // Fungsi untuk mengubah gambar utama saat thumbnail diklik
-    function changeMainImage(thumbnail) {
-        const mainImage = document.getElementById('mainProductImage');
-        mainImage.src = thumbnail.src;
+    // Fungsi untuk mengubah gambar utama, sekarang bisa diakses secara global
+    function changeMainImage(thumbnailElement) {
+        const index = Array.from(document.querySelectorAll('.thumbnail-item')).indexOf(thumbnailElement.parentElement);
+        if (index > -1) {
+            updateGallery(index);
+        }
     }
 
-    // --- TAMBAHKAN KODE BARU DI BAWAH INI ---
-    document.addEventListener('DOMContentLoaded', function() {
-        const copyBtn = document.getElementById('copyLinkBtn');
+    // Fungsi utama untuk mengupdate galeri
+    function updateGallery(index) {
+        const thumbnails = document.querySelectorAll('.thumbnail-item');
+        const mainImage = document.getElementById('mainProductImage');
+        const mainImageLink = mainImage ? mainImage.parentElement : null;
 
+        if (thumbnails.length === 0 || !mainImage) return;
+
+        const newImageSrc = thumbnails[index].querySelector('img').src;
+
+        mainImage.src = newImageSrc;
+        if (mainImageLink) {
+            mainImageLink.href = newImageSrc;
+        }
+
+        thumbnails.forEach(thumb => thumb.classList.remove('active'));
+        thumbnails[index].classList.add('active');
+
+        // Simpan index saat ini untuk tombol prev/next
+        window.currentImageIndex = index;
+    }
+
+    // Jalankan semua event listener setelah halaman selesai dimuat
+    document.addEventListener('DOMContentLoaded', function() {
+        window.currentImageIndex = 0; // Inisialisasi index gambar
+        
+        // --- Logika untuk Tombol Navigasi Thumbnail ---
+        const thumbContainer = document.getElementById('thumbnailContainer');
+        const thumbPrevBtn = document.getElementById('thumbPrevBtn');
+        const thumbNextBtn = document.getElementById('thumbNextBtn');
+
+        if (thumbContainer) {
+            const scrollAmount = 300;
+            thumbNextBtn.addEventListener('click', () => {
+                let nextIndex = window.currentImageIndex + 1;
+                if (nextIndex >= thumbContainer.children.length) {
+                    nextIndex = 0;
+                }
+                updateGallery(nextIndex);
+                // Scroll to the active thumbnail
+                thumbContainer.children[nextIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            });
+            thumbPrevBtn.addEventListener('click', () => {
+                let prevIndex = window.currentImageIndex - 1;
+                if (prevIndex < 0) {
+                    prevIndex = thumbContainer.children.length - 1;
+                }
+                updateGallery(prevIndex);
+                // Scroll to the active thumbnail
+                thumbContainer.children[prevIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            });
+        }
+
+        // --- Logika untuk Tombol Copy Link ---
+        const copyBtn = document.getElementById('copyLinkBtn');
         if (copyBtn) {
             copyBtn.addEventListener('click', function() {
-                // Ambil URL halaman saat ini
                 const urlToCopy = window.location.href;
-
-                // Gunakan Clipboard API untuk menyalin URL
-                navigator.clipboard.writeText(urlToCopy).then(function() {
-                    // Beri tahu pengguna bahwa link berhasil disalin
+                navigator.clipboard.writeText(urlToCopy).then(() => {
                     const icon = copyBtn.querySelector('i');
                     const originalIconClass = icon.className;
-
-                    // Ganti ikon menjadi centang
                     icon.className = 'fa fa-check';
-                    copyBtn.disabled = true; // Nonaktifkan tombol sejenak
-
-                    // Kembalikan ikon seperti semula setelah 2 detik
-                    setTimeout(function() {
+                    copyBtn.disabled = true;
+                    setTimeout(() => {
                         icon.className = originalIconClass;
                         copyBtn.disabled = false;
                     }, 2000);
-
-                }).catch(function(err) {
-                    console.error('Gagal menyalin tautan: ', err);
-                    // Cadangan jika browser tidak mendukung atau gagal
-                    alert('Gagal menyalin tautan ke clipboard.');
-                });
+                }).catch(err => console.error('Gagal menyalin:', err));
             });
         }
     });

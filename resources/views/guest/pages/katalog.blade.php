@@ -19,10 +19,15 @@
 <section class="section" id="products">
     <div class="container">
         <div class="row mb-5">
-            <div class="col-lg-12 search-heading">
-                <h2 class="search-title">Hasil Pencarian</h2>
-                <p class="result-count">Menampilkan hasil 1 dari 1234 untuk "<span class="search-term">Nama Toko Kamu</span>"</p>
-            </div>
+            @if (request()->filled('search'))
+                <div class="col-lg-12 search-heading">
+                    <h2 class="search-title">Hasil Pencarian</h2>
+                    {{-- Menampilkan jumlah hasil dan kata kunci pencarian secara dinamis --}}
+                    <p class="result-count">
+                        Menampilkan {{ $produks->firstItem() }} - {{ $produks->lastItem() }} dari {{ $produks->total() }} hasil untuk "<span class="search-term">{{ request('search') }}</span>"
+                    </p>
+                </div>
+            @endif
             <form action="{{ route('guest-katalog') }}" method="GET" class="w-100">
                 <div class="filters-wrapper">
                     <div class="filter-row">
