@@ -31,42 +31,60 @@ class PageController extends Controller
     }
 
     public function katalog(Request $request)
-{
-    $query = Produk::with('kategoriProduk', 'fotoProduk');
+    {
+        // Memuat relasi yang dibutuhkan untuk efisiensi
+        $query = Produk::with('kategoriProduk', 'fotoProduk');
 
-    if ($request->filled('kategori')) {
-        $query->whereHas('kategoriProduk', function ($q) use ($request) {
-            $q->where('slug', $request->kategori);
-        });
-    }
-
-    if ($request->filled('min_harga')) {
-        $query->where('harga', '>=', $request->min_harga);
-    }
-    if ($request->filled('max_harga')) {
-        $query->where('harga', '<=', $request->max_harga);
-    }
-
-    if ($request->filled('urutkan')) {
-        if ($request->urutkan == 'terlaris') {
-            $query->orderBy('jumlah_terjual', 'desc');
+        // -- LOGIKA PENCARIAN (SEARCH) --
+        if ($request->filled('search')) {
+            $searchTerm = $request->search;
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('nama_produk', 'like', '%' . $searchTerm . '%')
+                ->orWhere('deskripsi', 'like', '%' . $searchTerm . '%')
+                ->orWhereHas('kategoriProduk', function($kategoriQuery) use ($searchTerm) {
+                    $kategoriQuery->where('nama_kategori_produk', 'like', '%' . $searchTerm . '%');
+                });
+            });
         }
-        else {
-            $query->latest(); 
+
+        // -- LOGIKA FILTER KATEGORI --
+        if ($request->filled('kategori')) {
+            $query->whereHas('kategoriProduk', function ($q) use ($request) {
+                $q->where('slug', $request->kategori);
+            });
         }
-    } else {
-        $query->latest();
+
+        // -- LOGIKA FILTER HARGA --
+        if ($request->filled('min_harga')) {
+            $query->where('harga', '>=', $request->min_harga);
+        }
+        if ($request->filled('max_harga')) {
+            $query->where('harga', '<=', $request->max_harga);
+        }
+
+        // -- LOGIKA PENGURUTAN (SORT) --
+        $urutkan = $request->input('urutkan', 'terbaru'); 
+        switch ($urutkan) {
+            case 'harga-rendah':
+                $query->orderBy('harga', 'asc');
+                break;
+            case 'harga-tinggi':
+                $query->orderBy('harga', 'desc');
+                break;
+            default:
+                $query->latest();
+                break;
+        }
+
+        $produks = $query->paginate(12)->withQueryString();
+
+        $kategoris = KategoriProduk::all();
+
+        return view('guest.pages.katalog', [
+            'produks' => $produks,
+            'kategoris' => $kategoris,
+        ]);
     }
-
-    $produks = $query->paginate(12)->appends($request->query());
-
-    $kategoris = KategoriProduk::all();
-
-    return view('guest.pages.katalog', [
-        'produks' => $produks,
-        'kategoris' => $kategoris,
-    ]);
-}
 
     public function singleProduct($slug)
     {

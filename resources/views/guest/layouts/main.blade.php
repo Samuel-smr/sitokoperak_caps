@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/lightbox.css') }}">
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet" />
     
     <link rel="stylesheet" href="{{ asset('assets/css/index-css.css') }}">
     @stack('styles')
@@ -50,8 +50,8 @@
                 </a>
 
                 <!-- Search -->
-                <form class="d-flex flex-grow-1">
-                    <input class="form-control" type="search" placeholder="Cari Produk">
+                <form action="{{ route('guest-katalog') }}" method="GET" class="d-flex flex-grow-1">
+                    <input class="form-control" type="search" name="search" placeholder="Cari produk atau kategori..." value="{{ request('search') }}">
                 </form>
 
                 <!-- Login -->
@@ -112,62 +112,65 @@
     <!-- ***** Content End ***** -->
 
    <!-- ***** Footer Start ***** -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row footer-flex">
-                <!-- Logo & Alamat -->
-                <div class="mb-4">
-                    <h3 class="footer-logo">TekoPerakku</h3>
-                    <ul class="footer-list">
-                        <li>59GX+957, JL. Watu Gateng,<br>Prenggan, Kec. Kotagede, Kota Yogyakarta</li>
-                        <li>kotagedhe@gmail.com</li>
-                        <li>088-098-202</li>
-                    </ul>
-                </div>
+    {{-- Kode Footer Baru dengan Grid Bootstrap --}}
+<footer class="footer">
+    <div class="container">
+        <div class="row">
 
-                <!-- Kategori -->
-                <div class="mb-4">
-                    <h5 class="footer-title">Kategori</h5>
-                    <ul class="footer-list">
-                        @foreach ($randomKategoris as $kategori)
-                            <li>
-                                <a href="{{ route('guest-productsByCategory', $kategori->slug) }}">
-                                    {{ $kategori->nama_kategori_produk }}
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
+            {{-- Kolom 1: Logo & Alamat (Lebih besar) --}}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <h3 class="footer-logo">TekoPerakku</h3>
+                <ul class="footer-list">
+                    <li>59GX+957, JL. Watu Gateng,<br>Prenggan, Kec. Kotagede, Kota Yogyakarta</li>
+                    <li>kotagedhe@gmail.com</li>
+                    <li>088-098-202</li>
+                </ul>
+            </div>
 
-                <!-- Informasi Kami -->
-                <div class="mb-4">
-                    <h5 class="footer-title">Informasi Kami</h5>
-                    <ul class="footer-list">
-                        <li><a href="{{ route('guest-index') }}">Beranda</a></li>
-                        <li><a href="{{ route('guest-about') }}">Tentang Kami</a></li>
-                        <li><a href="{{ route('guest-contact') }}">Kontak Kami</a></li>
-                    </ul>
-                </div>
+            {{-- Kolom 2: Kategori --}}
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h5 class="footer-title">Kategori</h5>
+                <ul class="footer-list">
+                    @foreach ($randomKategoris->take(4) as $kategori) {{-- Batasi 4 item --}}
+                        <li>
+                            <a href="#">{{-- Ganti dengan route --}}
+                                {{ $kategori->nama_kategori_produk }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
 
-                <!-- Sosial Media -->
-                <div class="mb-4">
-                    <h5 class="footer-title">Sosial Media</h5>
-                    <div class="footer-social">
-                        <a href="#"><i class="fa fa-facebook"></i></a>
-                        <a href="#"><i class="fa fa-twitter"></i></a>
-                        <a href="#"><i class="fa fa-instagram"></i></a>
-                    </div>
+            {{-- Kolom 3: Informasi Kami --}}
+            <div class="col-lg-3 col-md-6 mb-4">
+                <h5 class="footer-title">Informasi Kami</h5>
+                <ul class="footer-list">
+                    <li><a href="{{ route('guest-index') }}">Beranda</a></li>
+                    <li><a href="{{ route('guest-about') }}">Tentang Kami</a></li>
+                    <li><a href="{{ route('guest-contact') }}">Kontak Kami</a></li>
+                </ul>
+            </div>
+
+            {{-- Kolom 4: Sosial Media --}}
+            <div class="col-lg-3 col-md-6 mb-4">
+                <h5 class="footer-title">Sosial Media</h5>
+                <div class="footer-social">
+                    <a href="#"><i class="fa fa-facebook"></i></a>
+                    <a href="#"><i class="fa fa-twitter"></i></a>
+                    <a href="#"><i class="fa fa-instagram"></i></a>
                 </div>
             </div>
 
-            <!-- Copyright -->
-            <div class="row mt-4">
-                <div class="col-12 text-center">
-                    <p class="footer-copy">Copyright © 2025 | All Rights Reserved.</p>
-                </div>
+        </div>
+
+        {{-- Copyright --}}
+        <div class="row mt-4">
+            <div class="col-12 text-center">
+                <p class="footer-copy">Copyright © 2025 | All Rights Reserved.</p>
             </div>
         </div>
-    </footer>
+    </div>
+</footer>
 
 
     <!-- jQuery -->
