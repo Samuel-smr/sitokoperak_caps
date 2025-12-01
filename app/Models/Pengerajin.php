@@ -21,4 +21,11 @@ class Pengerajin extends Model
     {
         return $this->hasMany(UsahaPengerajin::class, 'pengerajin_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+    
+
 }

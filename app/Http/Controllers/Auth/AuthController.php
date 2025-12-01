@@ -20,7 +20,20 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/admin/profile'); // sesuaikan dengan tujuan
+
+            $role = Auth::user()->role;
+
+            if ($role === 'admin') {
+                return redirect()->intended('/admin/profile');
+            }
+
+            if ($role === 'pengerajin') {
+                return redirect()->intended('/pengerajin/dashboard');
+            }
+
+            // Jika role tidak dikenali
+            Auth::logout();
+            return back()->withErrors(['username' => 'Role tidak valid.']);
         }
 
         // return back()->withErrors([

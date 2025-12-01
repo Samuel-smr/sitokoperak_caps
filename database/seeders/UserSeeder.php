@@ -34,5 +34,11 @@ class UserSeeder extends Seeder
             'password' => Hash::make('12345'), // WAJIB di-hash
             'role' => 'admin',
         ]);
+        User::create(attributes: [
+            'username' => 'saya',
+            'email' => 'saya@example.com',
+            'password' => Hash::make('12345'), // WAJIB di-hash
+            'role' => 'pengerajin',
+        ]);
     }
 }

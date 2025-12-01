@@ -30,4 +30,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function pengerajin()
+    {
+        return $this->hasOne(Pengerajin::class, 'user_id', 'id');
+    }
+
 }

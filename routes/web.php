@@ -16,6 +16,9 @@ use App\Http\Controllers\Admin\UsahaJenisController;
 use App\Http\Controllers\Admin\UsahaProdukController;
 use App\Http\Controllers\Guest\PageController;
 use App\Http\Controllers\Admin\ExportController;
+use App\Http\Controllers\Pengerajin\DashboardPengerajinController;
+use App\Http\Controllers\Pengerajin\ProfilePengerajinController;
+use App\Http\Controllers\Pengerajin\ProdukPengerajinController;
 
 // Authentication Routes
 Route::get('login', [AuthController::class, 'showLoginForm'])->name('loginForm');
@@ -31,6 +34,23 @@ Route::get('katalog', [PageController::class, 'katalog'])->name('guest-katalog')
 Route::get('detail-usaha/{usaha}', [PageController::class, 'detailUsaha'])->name('guest-detail-usaha');
 Route::get('produk/kategori/{slug}', [PageController::class, 'productsByCategory'])->name('guest-productsByCategory');
 Route::get('produk/{slug}', [PageController::class, 'singleProduct'])->name('guest-singleProduct');
+
+
+//pengerarjin
+Route::middleware(['role:pengerajin'])->group(function () {
+    Route::get('pengerajin/dashboard', [DashboardPengerajinController::class, 'dashboard'])->name('dashboard');
+    Route::get('pengerajin/profile', [ProfilePengerajinController::class, 'profile'])->name('pengerajin.profile');
+    Route::get('pengerajin/produk', [ProdukPengerajinController::class, 'produk'])->name('pengerajin.produk');
+    Route::get('pengerajin/produk-all', [ProdukPengerajinController::class, 'produk_all'])->name('pengerajin.produk-all');
+
+    //crud produk pengerajin
+    Route::get('pengerajin/produk/create', [ProdukPengerajinController::class, 'create'])->name('pengerajin.produk.create');
+    Route::post('pengerajin/produk/store', [ProdukPengerajinController::class, 'store'])->name('pengerajin.produk.store');
+    Route::get('pengerajin/produk/edit/{id}', [ProdukPengerajinController::class, 'edit'])->name('pengerajin.produk.edit');
+    Route::put('pengerajin/produk/update/{id}', [ProdukPengerajinController::class, 'update'])->name('pengerajin.produk.update');
+    Route::delete('pengerajin/produk/delete/{id}', [ProdukPengerajinController::class, 'delete'])->name('pengerajin.produk.delete');
+
+});
 
 
 Route::middleware(['role:admin'])->group(function () {
