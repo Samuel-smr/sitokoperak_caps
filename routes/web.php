@@ -138,3 +138,9 @@ Route::middleware(['role:admin'])->group(function () {
     Route::get('admin/export-data', [ExportController::class, 'index'])->name('admin.export-data');
     Route::get('admin/export-pengerajin', [ExportController::class, 'exportPengerajin'])->name('admin.export-pengerajin');
 });
+
+// Produk Pending Approval
+Route::get('admin/produk-pending', [ProdukController::class, 'pending'])->name('admin.produk-pending');
+Route::patch('admin/produk/{id}/approve', [ProdukController::class, 'approve'])->name('admin.produk-approve');
+Route::patch('admin/produk/{id}/reject', [ProdukController::class, 'reject'])->name('admin.produk-reject');
+

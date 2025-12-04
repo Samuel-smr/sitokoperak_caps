@@ -12,18 +12,46 @@ class ProdukController extends Controller
 {
     public function index()
     {
-        $dataProduk = Produk::all(); // atau bisa juga pakai paginate()
+        // ✅ hanya produk yang sudah di-ACC (approved) tampil di list utama admin
+        $dataProduk = Produk::where('status', 'approved')->latest()->get();
 
         return view('admin.produk.index-produk', [
             'produks' => $dataProduk
         ]);
     }
 
+    // ✅ halaman khusus untuk produk pending (menunggu ACC)
+    public function pending()
+    {
+        $dataProduk = Produk::where('status', 'pending')->latest()->get();
+
+        return view('admin.produk.produk-pending', [
+            'produks' => $dataProduk
+        ]);
+    }
+
+    // ✅ admin ACC produk
+    public function approve($id)
+    {
+        $produk = Produk::findOrFail($id);
+        $produk->update(['status' => 'approved']);
+
+        return back()->with('success', 'Produk berhasil di-ACC.');
+    }
+
+    // ✅ admin tolak produk
+    public function reject($id)
+    {
+        $produk = Produk::findOrFail($id);
+        $produk->update(['status' => 'rejected']);
+
+        return back()->with('success', 'Produk berhasil ditolak.');
+    }
+
     public function create()
     {
-        // Ambil data kategori produk dari database
         $kategoriProduks = KategoriProduk::all();
-        // Kirim data kategori produk ke view
+
         return view('admin.produk.create-produk', [
             'kategoriProduks' => $kategoriProduks
         ]);
@@ -33,7 +61,7 @@ class ProdukController extends Controller
     {
         $kategoriProduks = KategoriProduk::all();
         $produk = Produk::findOrFail($id);
-        // Kirim data produk dan kategori produk ke view
+
         return view('admin.produk.edit-produk', [
             'kategoriProduks' => $kategoriProduks,
             'produk' => $produk
@@ -51,8 +79,15 @@ class ProdukController extends Controller
             'stok' => 'required|integer',
         ]);
 
-        // Simpan data produk ke database
-        Produk::create($request->all());
+        $data = $request->all();
+
+        // ✅ slug otomatis
+        $data['slug'] = Str::slug($data['nama_produk']);
+
+        // ✅ produk yang dibuat admin langsung approved
+        $data['status'] = 'approved';
+
+        Produk::create($data);
 
         return redirect()->route('admin.produk-index')
             ->with('success', 'Produk berhasil ditambahkan.');
@@ -69,10 +104,11 @@ class ProdukController extends Controller
             'stok' => 'required|integer',
         ]);
 
-        // Generate slug dari nama kategori
         $data['slug'] = Str::slug($data['nama_produk']);
 
-        // Update data produk di database
+        // ✅ jaga-jaga: kalau admin edit, tetap approved
+        $data['status'] = 'approved';
+
         Produk::where('id', $id)->update($data);
 
         return redirect()->route('admin.produk-index')
