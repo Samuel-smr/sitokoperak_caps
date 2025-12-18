@@ -28,7 +28,7 @@ class AuthController extends Controller
             }
 
             if ($role === 'pengerajin') {
-                return redirect()->intended('/pengerajin/dashboard');
+                return redirect()->intended('/pengerajin/profile');
             }
 
             // Jika role tidak dikenali

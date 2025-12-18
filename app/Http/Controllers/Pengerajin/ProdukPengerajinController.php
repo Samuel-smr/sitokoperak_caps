@@ -11,6 +11,8 @@ use App\Models\UsahaPengerajin;;
 use App\Models\UsahaProduk;
 use App\Models\KategoriProduk;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\StokHampirHabisMail;
 
 class ProdukPengerajinController extends Controller
 {
@@ -132,5 +134,19 @@ class ProdukPengerajinController extends Controller
         $produk->delete();
 
         return redirect()->route('pengerajin.produk')->with('success', 'Produk berhasil dihapus');
+    }
+
+
+    // cek stok hampir habis
+    public function cekStokHampirHabis()
+    {
+        $batas = 5; // stok minimal
+        $produk = Produk::where('stok', '<=', $batas)->get();
+
+        foreach ($produk as $p) {
+            Mail::to('samuelriguntoro@gmail.com')->send(new StokHampirHabisMail($p));
+        }
+
+        return 'Email peringatan stok telah dikirim.';
     }
 }

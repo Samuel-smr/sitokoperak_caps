@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\ExportController;
 use App\Http\Controllers\Pengerajin\DashboardPengerajinController;
 use App\Http\Controllers\Pengerajin\ProfilePengerajinController;
 use App\Http\Controllers\Pengerajin\ProdukPengerajinController;
+use App\Models\Produk;
 
 // Authentication Routes
 Route::get('login', [AuthController::class, 'showLoginForm'])->name('loginForm');
@@ -36,12 +37,31 @@ Route::get('produk/kategori/{slug}', [PageController::class, 'productsByCategory
 Route::get('produk/{slug}', [PageController::class, 'singleProduct'])->name('guest-singleProduct');
 
 
+Route::get('/tes-mail', function () {
+    Mail::raw('Ini email tes', function($message) {
+        $message->to('samuelriguntoro@gmail.com')
+                ->subject('Tes Mail');
+    });
+
+    return 'Email dikirim';
+});
+
+Route::get('/send-test-email', function () {
+    $messege = "This is a test email sent from SITOKOPERAK.";
+    $stokhampirhabis = Produk::where('stok', '<', 5)->get();
+    Mail::to('samuelriguntoro@gmail.com')->send(new App\Mail\SendTestEmail($messege, $stokhampirhabis));
+
+});
+
+
 //pengerarjin
 Route::middleware(['role:pengerajin'])->group(function () {
     Route::get('pengerajin/dashboard', [DashboardPengerajinController::class, 'dashboard'])->name('dashboard');
     Route::get('pengerajin/profile', [ProfilePengerajinController::class, 'profile'])->name('pengerajin.profile');
     Route::get('pengerajin/produk', [ProdukPengerajinController::class, 'produk'])->name('pengerajin.produk');
     Route::get('pengerajin/produk-all', [ProdukPengerajinController::class, 'produk_all'])->name('pengerajin.produk-all');
+
+    Route::get('pengerajin/produk/cek-stok', [ProdukPengerajinController::class, 'cekStokHampirHabis']);
 
     //crud produk pengerajin
     Route::get('pengerajin/produk/create', [ProdukPengerajinController::class, 'create'])->name('pengerajin.produk.create');
