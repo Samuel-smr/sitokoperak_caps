@@ -5,6 +5,8 @@ use App\Http\Middleware\RoleCheck; // pastikan ada use ini di atas
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route; // pastikan ada use ini di atas
 use Illuminate\Pagination\Paginator;
+use App\Models\Produk;
+use App\Observers\ProdukObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,5 +25,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Route::aliasMiddleware('role', RoleCheck::class); // <-- ini yang nambahin alias 'role'
         Paginator::useBootstrapFive();
+        Produk::observe(ProdukObserver::class);
     }
 }
