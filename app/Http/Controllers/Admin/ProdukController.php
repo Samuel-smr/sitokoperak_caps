@@ -12,7 +12,6 @@ class ProdukController extends Controller
 {
     public function index()
     {
-        // ✅ hanya produk yang sudah di-ACC (approved) tampil di list utama admin
         $dataProduk = Produk::where('status', 'approved')->latest()->get();
 
         return view('admin.produk.index-produk', [
@@ -20,13 +19,16 @@ class ProdukController extends Controller
         ]);
     }
 
-    // ✅ halaman khusus untuk produk pending (menunggu ACC)
+    // ✅ halaman produk pending + rejected (dalam 1 view)
     public function pending()
     {
-        $dataProduk = Produk::where('status', 'pending')->latest()->get();
+        $pendingProduk  = Produk::where('status', 'pending')->latest()->get();
+        $rejectedProduk = Produk::where('status', 'rejected')->latest()->get();
 
         return view('admin.produk.produk-pending', [
-            'produks' => $dataProduk
+            'produks' => $pendingProduk,
+            'rejectedProduks' => $rejectedProduk,
+            'kategoriProduks' => KategoriProduk::all(), // untuk dropdown modal edit
         ]);
     }
 
@@ -80,11 +82,7 @@ class ProdukController extends Controller
         ]);
 
         $data = $request->all();
-
-        // ✅ slug otomatis
         $data['slug'] = Str::slug($data['nama_produk']);
-
-        // ✅ produk yang dibuat admin langsung approved
         $data['status'] = 'approved';
 
         Produk::create($data);
@@ -93,6 +91,7 @@ class ProdukController extends Controller
             ->with('success', 'Produk berhasil ditambahkan.');
     }
 
+    // ✅ penting: JANGAN set status approved di update (biar pending/rejected tidak auto-approved saat edit)
     public function update(Request $request, $id)
     {
         $data = $request->validate([
@@ -106,13 +105,9 @@ class ProdukController extends Controller
 
         $data['slug'] = Str::slug($data['nama_produk']);
 
-        // ✅ jaga-jaga: kalau admin edit, tetap approved
-        $data['status'] = 'approved';
-
         Produk::where('id', $id)->update($data);
 
-        return redirect()->route('admin.produk-index')
-            ->with('success', 'Data Produk berhasil diupdate.');
+        return back()->with('success', 'Data Produk berhasil diupdate.');
     }
 
     public function destroy($id)
@@ -120,7 +115,6 @@ class ProdukController extends Controller
         $produk = Produk::findOrFail($id);
         $produk->delete();
 
-        return redirect()->route('admin.produk-index')
-            ->with('success', 'Data Produk berhasil dihapus.');
+        return back()->with('success', 'Produk berhasil dihapus.');
     }
 }

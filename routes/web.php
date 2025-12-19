@@ -164,3 +164,7 @@ Route::get('admin/produk-pending', [ProdukController::class, 'pending'])->name('
 Route::patch('admin/produk/{id}/approve', [ProdukController::class, 'approve'])->name('admin.produk-approve');
 Route::patch('admin/produk/{id}/reject', [ProdukController::class, 'reject'])->name('admin.produk-reject');
 
+Route::get('admin/produk-pending', [ProdukController::class, 'pending'])->name('admin.produk-pending');
+Route::patch('admin/produk/{id}/approve', [ProdukController::class, 'approve'])->name('admin.produk-approve');
+Route::patch('admin/produk/{id}/reject', [ProdukController::class, 'reject'])->name('admin.produk-reject');
+

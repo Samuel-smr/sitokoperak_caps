@@ -32,7 +32,7 @@ class SendTestEmail extends Mailable
             replyTo: [
                 new Address('admin@sitokoperak.com', 'Sitoko Perak'),
             ],
-            subject: 'Send Test Email',
+            subject: 'Notifikasi Stok Hampir Habis',
         );
     }
 
